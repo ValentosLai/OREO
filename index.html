@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreo: Bone Hunt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="game">
+
+    <!-- MAIN MENU -->
+    <section id="menuScreen" class="screen active">
+        <div class="menu-card">
+            <div class="logo-dog">🐶</div>
+
+            <h1>OREO</h1>
+            <h2>BONE HUNT</h2>
+
+            <p class="subtitle">A little adventure with your best friend.</p>
+
+            <div class="menu-buttons">
+                <button id="startBtn">▶ START GAME</button>
+                <button id="newGameBtn">🦴 NEW GAME</button>
+                <button id="instructionsBtn">❔ HOW TO PLAY</button>
+            </div>
+
+            <p class="best-score">
+                BEST SCORE: <span id="menuHighScore">0</span>
+            </p>
+        </div>
+    </section>
+
+
+    <!-- INSTRUCTIONS -->
+    <section id="instructionsScreen" class="screen">
+        <div class="instruction-card">
+
+            <button class="backBtn" id="backFromInstructions">← BACK</button>
+
+            <h1>HOW TO PLAY</h1>
+
+            <div class="instruction-list">
+
+                <div class="instruction">
+                    <span>🦴</span>
+                    <div>
+                        <strong>COLLECT BONES</strong>
+                        <p>Move Oreo toward the bones to collect them and earn points.</p>
+                    </div>
+                </div>
+
+                <div class="instruction">
+                    <span>🎮</span>
+                    <div>
+                        <strong>MOVE OREO</strong>
+                        <p>Use WASD or the Arrow Keys on PC.</p>
+                        <p>On mobile, use the controls on the screen.</p>
+                    </div>
+                </div>
+
+                <div class="instruction">
+                    <span>🪨</span>
+                    <div>
+                        <strong>AVOID OBSTACLES</strong>
+                        <p>Don't hit rocks and other obstacles. You only have 3 lives.</p>
+                    </div>
+                </div>
+
+                <div class="instruction">
+                    <span>⏱️</span>
+                    <div>
+                        <strong>BEAT THE CLOCK</strong>
+                        <p>Collect as many bones as possible before time runs out.</p>
+                    </div>
+                </div>
+
+                <div class="instruction">
+                    <span>🏆</span>
+                    <div>
+                        <strong>GET THE HIGH SCORE</strong>
+                        <p>Your best score will be saved automatically.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="bigBtn" id="playFromInstructions">
+                🐾 PLAY NOW
+            </button>
+
+        </div>
+    </section>
+
+
+    <!-- GAME -->
+    <section id="gameScreen" class="screen">
+
+        <!-- HUD -->
+        <div class="hud">
+
+            <div class="hud-item">
+                <span class="hud-label">SCORE</span>
+                <strong id="score">0</strong>
+            </div>
+
+            <div class="hud-item">
+                <span class="hud-label">TIME</span>
+                <strong id="timer">90</strong>
+            </div>
+
+            <div class="hud-item">
+                <span class="hud-label">LIVES</span>
+                <strong id="lives">❤️ ❤️ ❤️</strong>
+            </div>
+
+            <button id="pauseBtn">Ⅱ</button>
+        </div>
+
+
+        <!-- PLAY FIELD -->
+        <div id="playField">
+
+            <div class="sun"></div>
+
+            <div class="cloud cloud1"></div>
+            <div class="cloud cloud2"></div>
+
+            <div class="mountain mountain1"></div>
+            <div class="mountain mountain2"></div>
+
+            <div class="tree tree1">
+                <div class="tree-top"></div>
+                <div class="tree-trunk"></div>
+            </div>
+
+            <div class="tree tree2">
+                <div class="tree-top"></div>
+                <div class="tree-trunk"></div>
+            </div>
+
+            <div class="tree tree3">
+                <div class="tree-top"></div>
+                <div class="tree-trunk"></div>
+            </div>
+
+            <div class="grass grass1"></div>
+            <div class="grass grass2"></div>
+            <div class="grass grass3"></div>
+
+
+            <!-- BONES -->
+            <div class="bone">🦴</div>
+            <div class="bone">🦴</div>
+            <div class="bone">🦴</div>
+            <div class="bone">🦴</div>
+            <div class="bone">🦴</div>
+
+
+            <!-- OBSTACLES -->
+            <div class="obstacle rock">🪨</div>
+            <div class="obstacle rock">🪨</div>
+            <div class="obstacle bush">🌿</div>
+            <div class="obstacle bush">🌿</div>
+
+
+            <!-- OREO -->
+            <div id="oreo">
+
+                <div class="shadow"></div>
+
+                <div class="dog-body">
+                    <div class="spot spot1"></div>
+                    <div class="spot spot2"></div>
+                </div>
+
+                <div class="dog-head">
+                    <div class="ear left-ear"></div>
+                    <div class="ear right-ear"></div>
+
+                    <div class="eye left-eye"></div>
+                    <div class="eye right-eye"></div>
+
+                    <div class="muzzle"></div>
+                    <div class="nose"></div>
+
+                    <div class="mouth"></div>
+                </div>
+
+                <div class="dog-leg leg1"></div>
+                <div class="dog-leg leg2"></div>
+                <div class="dog-leg leg3"></div>
+                <div class="dog-leg leg4"></div>
+
+                <div class="tail"></div>
+            </div>
+
+            <!-- POPUP -->
+            <div id="pointsPopup">+10</div>
+
+            <!-- PAUSE -->
+            <div id="pauseOverlay">
+                <div class="pauseCard">
+                    <h1>GAME PAUSED</h1>
+                    <button id="resumeBtn">▶ RESUME</button>
+                    <button id="pauseMenuBtn">MAIN MENU</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- MOBILE CONTROLS -->
+        <div id="mobileControls">
+
+            <button class="control up" data-key="up">▲</button>
+
+            <div class="middle-controls">
+                <button class="control" data-key="left">◀</button>
+                <button class="control" data-key="down">▼</button>
+                <button class="control" data-key="right">▶</button>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GAME OVER -->
+    <section id="gameOverScreen" class="screen">
+
+        <div class="gameover-card">
+
+            <div class="gameover-dog">🐶</div>
+
+            <h1>GAME OVER</h1>
+
+            <p>Oreo's adventure has ended!</p>
+
+            <div class="result-box">
+
+                <div>
+                    <span>SCORE</span>
+                    <strong id="finalScore">0</strong>
+                </div>
+
+                <div>
+                    <span>BEST</span>
+                    <strong id="finalBest">0</strong>
+                </div>
+
+            </div>
+
+            <button id="playAgainBtn">🔄 PLAY AGAIN</button>
+            <button id="gameOverMenuBtn">🏠 MAIN MENU</button>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

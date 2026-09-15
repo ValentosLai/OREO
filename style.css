@@ -1,0 +1,984 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111;
+    user-select: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+#game {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+
+/* =========================
+   SCREENS
+========================= */
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+}
+
+.screen.active {
+    display: flex;
+}
+
+
+/* =========================
+   MAIN MENU
+========================= */
+
+#menuScreen {
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            rgba(18, 51, 68, .25),
+            rgba(5, 20, 28, .72)
+        ),
+        linear-gradient(
+            #83d7ff 0%,
+            #bdeaff 48%,
+            #68b85e 49%,
+            #2d7435 100%
+        );
+}
+
+.menu-card {
+    width: min(440px, 90%);
+    padding: 42px 35px;
+
+    text-align: center;
+
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 28px;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.5);
+}
+
+.logo-dog {
+    font-size: 82px;
+    animation: floatDog 2s ease-in-out infinite;
+}
+
+.menu-card h1 {
+    font-size: clamp(48px, 10vw, 72px);
+    letter-spacing: 10px;
+    color: white;
+    text-shadow: 0 5px 20px rgba(0,0,0,.35);
+}
+
+.menu-card h2 {
+    color: #fff;
+    letter-spacing: 7px;
+    font-size: 20px;
+}
+
+.subtitle {
+    margin: 12px 0 28px;
+    color: rgba(255,255,255,.9);
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu-buttons button,
+.bigBtn,
+.gameover-card button,
+.pauseCard button {
+    padding: 15px;
+    border-radius: 14px;
+
+    color: white;
+    background: rgba(20,35,40,.75);
+
+    border: 1px solid rgba(255,255,255,.25);
+
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    transition: .2s;
+}
+
+.menu-buttons button:first-child,
+.bigBtn,
+#playAgainBtn {
+    background: linear-gradient(135deg,#ffb52e,#f17a16);
+}
+
+.menu-buttons button:hover,
+.bigBtn:hover,
+.gameover-card button:hover,
+.pauseCard button:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.15);
+}
+
+.best-score {
+    margin-top: 25px;
+    color: white;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   INSTRUCTIONS
+========================= */
+
+#instructionsScreen {
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(135deg,#173f50,#285f47);
+}
+
+.instruction-card {
+    width: min(600px,92%);
+    max-height: 90vh;
+    overflow-y: auto;
+
+    padding: 30px;
+
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(18px);
+
+    border-radius: 25px;
+    border: 1px solid rgba(255,255,255,.3);
+
+    color: white;
+}
+
+.backBtn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(0,0,0,.25);
+    color: white;
+    margin-bottom: 18px;
+}
+
+.instruction-card h1 {
+    text-align: center;
+    margin-bottom: 22px;
+    letter-spacing: 3px;
+}
+
+.instruction {
+    display: flex;
+    gap: 16px;
+    padding: 15px;
+    margin-bottom: 10px;
+
+    border-radius: 15px;
+    background: rgba(0,0,0,.2);
+}
+
+.instruction > span {
+    font-size: 30px;
+}
+
+.instruction strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.instruction p {
+    font-size: 13px;
+    opacity: .8;
+    line-height: 1.5;
+}
+
+.bigBtn {
+    width: 100%;
+    margin-top: 15px;
+}
+
+
+/* =========================
+   GAME WORLD
+========================= */
+
+#gameScreen {
+    flex-direction: column;
+}
+
+#playField {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            #79d7ff 0%,
+            #b9edff 48%,
+            #72bd63 49%,
+            #3f913d 100%
+        );
+}
+
+
+/* SUN */
+
+.sun {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+
+    background: #ffe477;
+
+    right: 9%;
+    top: 9%;
+
+    box-shadow:
+        0 0 40px #ffe477,
+        0 0 90px rgba(255,230,100,.6);
+}
+
+
+/* CLOUDS */
+
+.cloud {
+    position: absolute;
+    width: 130px;
+    height: 40px;
+    background: white;
+    border-radius: 50px;
+    opacity: .8;
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 55px;
+    height: 55px;
+    left: 25px;
+    bottom: 10px;
+}
+
+.cloud::after {
+    width: 70px;
+    height: 70px;
+    right: 20px;
+    bottom: 5px;
+}
+
+.cloud1 {
+    left: 12%;
+    top: 15%;
+}
+
+.cloud2 {
+    right: 28%;
+    top: 25%;
+    transform: scale(.7);
+}
+
+
+/* MOUNTAINS */
+
+.mountain {
+    position: absolute;
+    bottom: 44%;
+    width: 0;
+    height: 0;
+
+    border-left: 180px solid transparent;
+    border-right: 180px solid transparent;
+    border-bottom: 210px solid #669b83;
+}
+
+.mountain1 {
+    left: 3%;
+}
+
+.mountain2 {
+    right: 5%;
+    transform: scale(.8);
+    opacity: .8;
+}
+
+
+/* TREES */
+
+.tree {
+    position: absolute;
+    bottom: 42%;
+}
+
+.tree1 {
+    left: 6%;
+}
+
+.tree2 {
+    right: 9%;
+    transform: scale(.8);
+}
+
+.tree3 {
+    left: 43%;
+    transform: scale(.6);
+}
+
+.tree-top {
+    width: 110px;
+    height: 130px;
+
+    background:
+        radial-gradient(circle at 30% 30%,#74bf61 0 30%,transparent 31%),
+        radial-gradient(circle at 70% 35%,#479d4c 0 35%,transparent 36%),
+        radial-gradient(circle at 50% 70%,#368c42 0 42%,transparent 43%);
+
+    border-radius: 50%;
+}
+
+.tree-trunk {
+    width: 24px;
+    height: 85px;
+    background: #70482e;
+    margin: -10px auto 0;
+}
+
+
+/* GRASS */
+
+.grass {
+    position: absolute;
+    bottom: 0;
+    height: 43%;
+    width: 100%;
+}
+
+.grass1 {
+    background:
+        radial-gradient(circle at 20% 30%,rgba(255,255,255,.12) 0 2px,transparent 3px),
+        radial-gradient(circle at 70% 60%,rgba(255,255,255,.1) 0 2px,transparent 3px);
+}
+
+.grass2 {
+    bottom: 3%;
+    height: 25%;
+    background: rgba(40,130,55,.28);
+    border-radius: 50% 50% 0 0;
+}
+
+.grass3 {
+    bottom: 0;
+    height: 13%;
+    background: rgba(15,90,35,.28);
+}
+
+
+/* =========================
+   HUD
+========================= */
+
+.hud {
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    z-index: 100;
+
+    background: rgba(10,25,30,.88);
+    color: white;
+
+    backdrop-filter: blur(12px);
+}
+
+.hud-item {
+    min-width: 80px;
+    text-align: center;
+}
+
+.hud-label {
+    display: block;
+    font-size: 9px;
+    opacity: .6;
+    letter-spacing: 2px;
+}
+
+.hud-item strong {
+    font-size: 18px;
+}
+
+#pauseBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+
+    color: white;
+    background: rgba(255,255,255,.12);
+}
+
+
+/* =========================
+   BONES
+========================= */
+
+.bone {
+    position: absolute;
+
+    font-size: 38px;
+
+    filter:
+        drop-shadow(0 5px 5px rgba(0,0,0,.3));
+
+    animation:
+        boneFloat 1.5s ease-in-out infinite;
+
+    z-index: 10;
+
+    transition: .2s;
+}
+
+.bone.collected {
+    animation: boneCollected .35s forwards;
+}
+
+
+/* =========================
+   OBSTACLES
+========================= */
+
+.obstacle {
+    position: absolute;
+    font-size: 42px;
+    z-index: 9;
+    filter: drop-shadow(0 5px 4px rgba(0,0,0,.25));
+}
+
+
+/* =========================
+   OREO
+========================= */
+
+#oreo {
+    position: absolute;
+
+    width: 125px;
+    height: 100px;
+
+    left: 50%;
+    top: 70%;
+
+    z-index: 30;
+
+    transform: translate(-50%,-50%);
+
+    transition: left .08s linear, top .08s linear;
+}
+
+.shadow {
+    position: absolute;
+
+    width: 90px;
+    height: 18px;
+
+    background: rgba(0,0,0,.25);
+
+    border-radius: 50%;
+
+    left: 18px;
+    bottom: -3px;
+
+    filter: blur(3px);
+}
+
+.dog-body {
+    position: absolute;
+
+    width: 75px;
+    height: 50px;
+
+    background: #f4f4f4;
+
+    border-radius: 45%;
+
+    left: 30px;
+    top: 38px;
+
+    box-shadow: inset -10px -5px rgba(0,0,0,.08);
+}
+
+.spot {
+    position: absolute;
+    background: #222;
+    border-radius: 50%;
+}
+
+.spot1 {
+    width: 25px;
+    height: 22px;
+    right: 7px;
+    top: 5px;
+}
+
+.spot2 {
+    width: 18px;
+    height: 18px;
+    left: 15px;
+    bottom: 4px;
+}
+
+.dog-head {
+    position: absolute;
+
+    width: 58px;
+    height: 58px;
+
+    background: #f5f5f5;
+
+    border-radius: 48%;
+
+    left: 4px;
+    top: 17px;
+
+    z-index: 4;
+}
+
+.ear {
+    position: absolute;
+
+    width: 23px;
+    height: 37px;
+
+    background: #222;
+
+    border-radius: 50%;
+}
+
+.left-ear {
+    left: -5px;
+    top: 3px;
+    transform: rotate(-25deg);
+}
+
+.right-ear {
+    right: -4px;
+    top: 2px;
+    transform: rotate(25deg);
+}
+
+.eye {
+    position: absolute;
+
+    width: 7px;
+    height: 7px;
+
+    background: #111;
+
+    border-radius: 50%;
+
+    top: 24px;
+}
+
+.left-eye {
+    left: 17px;
+}
+
+.right-eye {
+    right: 17px;
+}
+
+.muzzle {
+    position: absolute;
+
+    width: 30px;
+    height: 20px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    left: 14px;
+    bottom: 5px;
+}
+
+.nose {
+    position: absolute;
+
+    width: 13px;
+    height: 10px;
+
+    background: #111;
+
+    border-radius: 50%;
+
+    left: 22px;
+    bottom: 12px;
+
+    z-index: 2;
+}
+
+.mouth {
+    position: absolute;
+
+    width: 12px;
+    height: 7px;
+
+    border-bottom: 2px solid #222;
+    border-radius: 50%;
+
+    left: 23px;
+    bottom: 5px;
+}
+
+.dog-leg {
+    position: absolute;
+
+    width: 14px;
+    height: 35px;
+
+    background: white;
+
+    border-radius: 8px;
+
+    top: 66px;
+}
+
+.leg1 {
+    left: 35px;
+}
+
+.leg2 {
+    left: 55px;
+}
+
+.leg3 {
+    left: 78px;
+}
+
+.leg4 {
+    left: 98px;
+}
+
+.tail {
+    position: absolute;
+
+    width: 45px;
+    height: 13px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    right: -2px;
+    top: 40px;
+
+    transform: rotate(-25deg);
+    transform-origin: left center;
+
+    animation: tailWag .45s ease-in-out infinite alternate;
+}
+
+
+/* =========================
+   POPUP
+========================= */
+
+#pointsPopup {
+    position: absolute;
+
+    display: none;
+
+    color: #fff;
+    font-weight: bold;
+    font-size: 25px;
+
+    text-shadow: 0 2px 5px #000;
+
+    z-index: 100;
+}
+
+
+/* =========================
+   MOBILE CONTROLS
+========================= */
+
+#mobileControls {
+    display: none;
+
+    position: absolute;
+
+    bottom: 18px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 200;
+}
+
+.middle-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 15px;
+
+    color: white;
+    background: rgba(10,25,30,.65);
+
+    backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255,255,255,.2);
+
+    font-size: 20px;
+}
+
+.up {
+    display: block;
+    margin: auto auto 8px;
+}
+
+
+/* =========================
+   GAME OVER
+========================= */
+
+#gameOverScreen {
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(135deg,#142e35,#183c29);
+}
+
+.gameover-card {
+    width: min(420px,90%);
+
+    padding: 40px;
+
+    text-align: center;
+
+    color: white;
+
+    background: rgba(255,255,255,.1);
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 25px;
+}
+
+.gameover-dog {
+    font-size: 75px;
+}
+
+.gameover-card h1 {
+    margin: 10px 0;
+    letter-spacing: 3px;
+}
+
+.gameover-card p {
+    opacity: .7;
+}
+
+.result-box {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+
+    margin: 25px 0;
+}
+
+.result-box span {
+    display: block;
+    font-size: 10px;
+    opacity: .6;
+    letter-spacing: 2px;
+}
+
+.result-box strong {
+    font-size: 30px;
+}
+
+.gameover-card button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+/* =========================
+   PAUSE
+========================= */
+
+#pauseOverlay {
+    position: absolute;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,0,0,.55);
+
+    z-index: 500;
+}
+
+#pauseOverlay.show {
+    display: flex;
+}
+
+.pauseCard {
+    width: min(350px,85%);
+    padding: 30px;
+
+    text-align: center;
+
+    color: white;
+
+    background: rgba(20,30,30,.9);
+
+    border-radius: 20px;
+}
+
+.pauseCard h1 {
+    margin-bottom: 20px;
+}
+
+.pauseCard button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes floatDog {
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes boneFloat {
+    0%,100% {
+        transform: translateY(0) rotate(-8deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(8deg);
+    }
+}
+
+@keyframes boneCollected {
+    to {
+        transform: scale(2) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+@keyframes tailWag {
+    from {
+        transform: rotate(-35deg);
+    }
+
+    to {
+        transform: rotate(25deg);
+    }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .hud {
+        height: 62px;
+    }
+
+    .hud-item strong {
+        font-size: 15px;
+    }
+
+    #mobileControls {
+        display: block;
+    }
+
+    .bone {
+        font-size: 32px;
+    }
+
+    .tree {
+        transform: scale(.65);
+        transform-origin: bottom;
+    }
+
+    .tree2 {
+        transform: scale(.55);
+    }
+
+    .tree3 {
+        display: none;
+    }
+
+    .mountain {
+        transform: scale(.55);
+        transform-origin: bottom;
+    }
+
+    .mountain2 {
+        transform: scale(.45);
+    }
+
+    .menu-card {
+        padding: 30px 22px;
+    }
+
+    .logo-dog {
+        font-size: 65px;
+    }
+
+    .instruction-card {
+        padding: 20px;
+    }
+
+    #oreo {
+        transform: translate(-50%,-50%) scale(.82);
+    }
+}
